@@ -16,7 +16,7 @@ Select any text on any webpage, right-click, and instantly send it to ChatGPT.
 - No data collected
 
 ## Support
-For any issues or questions, open a [GitHub Issue](../../issues) or email us.
+For any issues or questions, open a [GitHub Issue](../../issues) or email us at borbreak@gmail.com.
 
 ## Privacy
 This extension does not collect, store, or transmit any user data.
