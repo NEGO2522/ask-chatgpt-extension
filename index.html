@@ -650,7 +650,7 @@
 
     <script>
       let joined = 47;
-      function joinWaitlist() {
+      async function joinWaitlist() {
         const emailEl = document.getElementById("email");
         const email = emailEl.value.trim();
         if (!email || !email.includes("@")) {
@@ -658,12 +658,32 @@
           setTimeout(() => (emailEl.style.borderColor = ""), 1500);
           return;
         }
-        joined++;
-        document.getElementById("successMsg").style.display = "block";
-        document.getElementById("formNote").textContent =
-          joined + " people on the waitlist";
-        document.querySelector(".form-wrap").style.display = "none";
-        emailEl.value = "";
+
+        const btn = document.querySelector(".form-wrap button");
+        btn.textContent = "Sending…";
+        btn.disabled = true;
+
+        try {
+          const res = await fetch("https://formspree.io/f/mredzyga", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email })
+          });
+
+          if (res.ok) {
+            joined++;
+            document.getElementById("successMsg").style.display = "block";
+            document.getElementById("formNote").textContent =
+              joined + " people on the waitlist";
+            document.querySelector(".form-wrap").style.display = "none";
+          } else {
+            btn.textContent = "Try again";
+            btn.disabled = false;
+          }
+        } catch (e) {
+          btn.textContent = "Try again";
+          btn.disabled = false;
+        }
       }
       document.getElementById("email").addEventListener("keydown", (e) => {
         if (e.key === "Enter") joinWaitlist();
