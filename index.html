@@ -419,7 +419,11 @@
       </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
+      // ── EMAILJS INIT ──
+      emailjs.init("g--u7fCvANirZbdzY");
+
       // ── CARD CAROUSEL ──
       let current = 0;
       const total = 2;
@@ -451,23 +455,22 @@
         btn.textContent = "Sending…";
         btn.disabled = true;
         try {
-          const res = await fetch("https://formspree.io/f/mredzyga", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email })
-          });
-          if (res.ok) {
-            joined++;
-            document.getElementById("successMsg").style.display = "block";
-            document.getElementById("formNote").style.display = "none";
-            document.querySelector(".form-wrap").style.display = "none";
-            document.getElementById("spCount").textContent = joined;
-            // update avatar initials strip
-            const avatars = document.querySelectorAll(".sp-avatar");
-            avatars[avatars.length - 1].textContent = email[0].toUpperCase();
-            document.querySelector(".sp-text").innerHTML = `Waitlist: <span>${joined} enrolled</span> &nbsp;&middot;&nbsp; You're in!`;
-          } else { throw new Error(); }
-        } catch {
+          const params = {
+            email: email,
+            name: email.split("@")[0],
+            message: "New waitlist signup"
+          };
+          await emailjs.send("service_iz5nhkg", "template_1g4x3zn", params);
+          await emailjs.send("service_iz5nhkg", "template_cnx85co", params);
+          joined++;
+          document.getElementById("successMsg").style.display = "block";
+          document.getElementById("formNote").style.display = "none";
+          document.querySelector(".form-wrap").style.display = "none";
+          document.getElementById("spCount").textContent = joined;
+          const avatars = document.querySelectorAll(".sp-avatar");
+          avatars[avatars.length - 1].textContent = email[0].toUpperCase();
+          document.querySelector(".sp-text").innerHTML = `Waitlist: <span>${joined} enrolled</span> &nbsp;&middot;&nbsp; You're in!`;
+        } catch(err) {
           btn.textContent = "Try again";
           btn.disabled = false;
         }
